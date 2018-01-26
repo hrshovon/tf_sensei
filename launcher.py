@@ -36,7 +36,10 @@ class runcmd(QThread):
 
     @pyqtSlot(str)
     def run_command(self,command):
-        process = subprocess.Popen(shlex.split(command),stdout=subprocess.PIPE, stderr=subprocess.STDOUT,shell=False)
+        if os.name=='nt':
+            process = subprocess.Popen(command,stdout=subprocess.PIPE, stderr=subprocess.STDOUT,shell=False)
+        else:
+            process = subprocess.Popen(shlex.split(command),stdout=subprocess.PIPE, stderr=subprocess.STDOUT,shell=False)
         for line in process.stdout:
             print("out newline:")
             print(line)
@@ -202,16 +205,20 @@ class main_ui(QMainWindow):
         params_dict['data_path']=data_path
 
     def generate_cmd(self,data_folder,image_folder,train=True):
-        command_to_run="python3 generate_tfrecord.py"
-        if train==True:
-            command_to_run+=" --csv_input="+os.path.join(data_folder,'train_labels.csv')
-            command_to_run+=" --output_path="+os.path.join(data_folder,'train.record')
-            command_to_run+=" --image_path="+os.path.join(image_folder,'train')
+        if os.name!='nt':
+            command_to_run='python3 '+os.path.join(os.getcwd(),'generate_tfrecord.py')
         else:
-            command_to_run+=" --csv_input="+os.path.join(data_folder,'test_labels.csv')
-            command_to_run+=" --output_path="+os.path.join(data_folder,'test.record')
-            command_to_run+=" --image_path="+os.path.join(image_folder,'test')
-        command_to_run+=" --label_map="+os.path.join(data_folder,'labels_trainer.xml')
+            command_to_run='python3 "'+os.path.join(os.getcwd(),'generate_tfrecord.py')+'"'
+        if train==True:
+            command_to_run+=' --csv_input='+os.path.join(data_folder,'train_labels.csv')
+            command_to_run+=' --output_path='+os.path.join(data_folder,'train.record')
+            command_to_run+=' --image_path='+os.path.join(image_folder,'train')
+        else:
+            command_to_run+=' --csv_input='+os.path.join(data_folder,'test_labels.csv')
+            command_to_run+=' --output_path='+os.path.join(data_folder,'test.record')
+            command_to_run+=' --image_path='+os.path.join(image_folder,'test')
+        command_to_run+=' --label_map='+os.path.join(data_folder,'labels_trainer.xml')
+        print(command_to_run)
         return command_to_run
     def get_labels_from_file(self,xmlfilepath):
         ret_list=[]
@@ -403,15 +410,21 @@ class main_ui(QMainWindow):
             return
 
         training_dir=os.path.dirname(pipeline_path)
-
-        train_command_str='#!/bin/bash\n'
+        train_command_str=''
+        if os.name!='nt':
+            train_command_str='#!/bin/bash\n'
         train_command_str+='python3 '+os.path.join(TFO_PATH,'train.py')
         train_command_str+=' --logtostderr --train_dir='+training_dir
         train_command_str+=' --pipeline_config_path='+pipeline_path
-        with open(os.path.join(prj,'train_bash_file.sh'),'w') as f:
+        if os.name=='nt':
+            train_script_name='train_bash_file.bat'
+        else:
+            train_script_name='train_bash_file.sh'
+        with open(os.path.join(prj,train_script_name),'w') as f:
             f.write(train_command_str)
-        os.system('chmod +x '+os.path.join(prj,'train_bash_file.sh'))
-        QMessageBox.about(self,'Done',"Created the bash file for training. For now, this software won't run it automatically since there is an issue of early stopping and such. So please open a terminal in the project directory and run ./train_bash_file.sh to train your model.Also open another terminal in the same directory and run 'tensorboard --logdir training/' to start tensorboard. When you are done with training. Come back here and Click Export Inference graph button to create a prediction ready version fo the model.\nIf you are gettting OOM error from tensorflow, you can open <project_path>/training/training_conf.conf and reduce the batch size to see if it improves anything.")
+        if os.name!='nt':
+            os.system('chmod +x '+os.path.join(prj,'train_bash_file.sh'))
+        QMessageBox.about(self,'Done',"Created the bash file for training(bat file for windows). For now, this software won't run it automatically since there is an issue of early stopping and such. So please open a terminal in the project directory and run ./train_bash_file.sh to train your model(train_bash_file.bat for windows).Also open another terminal in the same directory and run 'tensorboard --logdir training/' to start tensorboard. When you are done with training. Come back here and Click Export Inference graph button to create a prediction ready version fo the model.\nIf you are gettting OOM error from tensorflow, you can open <project_path>/training/training_conf.conf and reduce the batch size to see if it improves anything.")
 
 
     def export_inference_graph(self):
