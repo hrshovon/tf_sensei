@@ -486,6 +486,7 @@ class main_ui(QMainWindow):
         command_str+=' --pipeline_config_path '+pipeline_path
         command_str+=' --trained_checkpoint_prefix '+ckpt_file_path
         command_str+=' --output_directory '+output_dir
+        
         print(command_str)
         self.run_command(command_str)
 if __name__=="__main__":
