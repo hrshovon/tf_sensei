@@ -11,7 +11,6 @@ import xml.etree.ElementTree as ET
 import subprocess
 import shlex
 from xml_to_csv import convert_xml_to_csv
-import wget
 import requests
 import tarfile
 import shutil
