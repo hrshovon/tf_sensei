@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>691</width>
+      <width>781</width>
       <height>81</height>
      </rect>
     </property>
@@ -59,8 +59,8 @@
       <rect>
        <x>10</x>
        <y>30</y>
-       <width>611</width>
-       <height>81</height>
+       <width>621</width>
+       <height>91</height>
       </rect>
      </property>
      <property name="text">
@@ -87,7 +87,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>110</y>
+       <y>130</y>
        <width>99</width>
        <height>41</height>
       </rect>
@@ -99,8 +99,8 @@
     <widget class="QLabel" name="lbldatafolder">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>120</y>
+       <x>110</x>
+       <y>130</y>
        <width>341</width>
        <height>16</height>
       </rect>
@@ -304,19 +304,6 @@
     <property name="text">
      <string>Generate
 Trainer Script</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="bttnsettings">
-    <property name="geometry">
-     <rect>
-      <x>710</x>
-      <y>10</y>
-      <width>81</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Settings...</string>
     </property>
    </widget>
    <widget class="QPushButton" name="bttngettrainedmodel">
