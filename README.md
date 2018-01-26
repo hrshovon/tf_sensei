@@ -10,6 +10,8 @@ This GUI is built using python3 and QT5. So, if you haven't got that, install py
 up a terminal and type:
    
    sudo apt-get install python3-pyqt5
+   
+   sudo pip3 install requests(or just pip install requests if running python3 in windows, try whichever works for you.)
 
 Tensorflow object detection API must also be installed. See their installation guide to do that first.
 For Annotation, LabelImg is needed. you can get it from https://github.com/tzutalin/labelImg
