@@ -249,6 +249,9 @@ class main_ui(QMainWindow):
         if os.path.exists(SETTINGS_PATH)==False:
             QMessageBox.warning(self, "Warning", "No Settings file found. It seems this is a fresh start. So specify the path of the object_detection directory.")
             TFO_PATH=self.select_folder()
+            if len(TFO_PATH)==0:
+                QMessageBox.warning(self, "Warning", "No directory selected. GUI will now exit.")
+                exit()
             self.create_settings()
         else:
             _tfo_path=self.get_tfo_path()
@@ -272,6 +275,9 @@ class main_ui(QMainWindow):
     def update_tfo_path(self):
         global TFO_PATH
         folder=self.select_folder()
+        if len(folder)==0:
+            QMessageBox.warning(self, "Warning", "No directory selected. GUI will now exit.")
+            exit()
         tree = ET.parse(SETTINGS_PATH)
         root = tree.getroot()
         tfo_path=root.find('TFO_PATH')
