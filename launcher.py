@@ -270,7 +270,7 @@ class main_ui(QMainWindow):
 
     def select_folder(self):
         folder = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
-        return folder
+        return QDir.toNativeSeparators(folder)
 
     def get_tfo_path(self):
         tree = ET.ElementTree(file=SETTINGS_PATH)
@@ -374,9 +374,9 @@ class main_ui(QMainWindow):
             return
         project_path=str(self.ui.lblprojectpath.text())
         options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self,"Select a config file", os.path.join(TFO_PATH,'samples','configs'),"config files (*.config);;All Files (*)", options=options)
         if fileName:
+            fileName=QDir.toNativeSeparators(fileName)
             training_path=os.path.join(project_path,'training')
             if os.path.exists(training_path)==False:
                 os.mkdir(training_path)
@@ -388,7 +388,7 @@ class main_ui(QMainWindow):
                 print(keys,values)
             reply=QMessageBox.question(self,"Confirm Automatic modification","tf_sensei is capable of performing very basic modifications to the file(Adding number of classes, train and test tfrecord file path and label map file path).However,if you wish to make advanced changes like model configuration,batch_size etc, then you can change them by accessing the file at <project_path>/training directory. It's name would be training_conf.config. Now press Yes for auto modification and No for manual.", QMessageBox.Yes|QMessageBox.No)
             if reply==QMessageBox.Yes:
-
+                
                 modify_file(destination_file_path,int(self.ui.lstlabels.count()),params_dict['ckpt_path'],os.path.join(params_dict['data_path'],'train.record'),os.path.join(params_dict['data_path'],'test.record'),os.path.join(params_dict['data_path'],'labels_trainer.pbtxt'))
                 self.ui.txtstatus.append("Done with modification. Please check for yourself to confirm.")
 

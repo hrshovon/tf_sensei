@@ -3,6 +3,11 @@ import shutil
 def modify_file(file_path,num_classes,ckpt_path,train_record_path,test_record_path,label_map_path):
     counter=0
     textbuf=''
+    if os.name=='nt':
+        ckpt_path=ckpt_path.replace('\\','\\\\')
+        train_record_path=train_record_path.replace('\\','\\\\')
+        test_record_path=test_record_path.replace('\\','\\\\')
+        label_map_path=label_map_path.replace('\\','\\\\')
     with open(file_path,'r') as f:
         for line in f:
             txt=line
