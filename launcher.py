@@ -388,7 +388,7 @@ class main_ui(QMainWindow):
                 print(keys,values)
             reply=QMessageBox.question(self,"Confirm Automatic modification","tf_sensei is capable of performing very basic modifications to the file(Adding number of classes, train and test tfrecord file path and label map file path).However,if you wish to make advanced changes like model configuration,batch_size etc, then you can change them by accessing the file at <project_path>/training directory. It's name would be training_conf.config. Now press Yes for auto modification and No for manual.", QMessageBox.Yes|QMessageBox.No)
             if reply==QMessageBox.Yes:
-                
+
                 modify_file(destination_file_path,int(self.ui.lstlabels.count()),params_dict['ckpt_path'],os.path.join(params_dict['data_path'],'train.record'),os.path.join(params_dict['data_path'],'test.record'),os.path.join(params_dict['data_path'],'labels_trainer.pbtxt'))
                 self.ui.txtstatus.append("Done with modification. Please check for yourself to confirm.")
 
@@ -475,12 +475,17 @@ class main_ui(QMainWindow):
                                 print(ckpt_file_path)
                                 break
 
+        output_dir=os.path.join(prj,os.path.basename(prj)+'_output')
+        if os.name=='nt':
+            pipeline_path=pipeline_path.replace('\\','\\\\')
+            ckpt_file_path=ckpt_file_path.replace('\\','\\\\')
+            output_dir=output_dir.replace('\\','\\\\')
         #now,we have it all, so let's do it
         command_str='python3 '+os.path.join(TFO_PATH,'export_inference_graph.py')
         command_str+=' --input_type image_tensor'
         command_str+=' --pipeline_config_path '+pipeline_path
         command_str+=' --trained_checkpoint_prefix '+ckpt_file_path
-        command_str+=' --output_directory '+os.path.join(prj,os.path.basename(prj)+'_output')
+        command_str+=' --output_directory '+output_dir)
         print(command_str)
         self.run_command(command_str)
 if __name__=="__main__":
