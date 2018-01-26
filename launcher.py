@@ -6,7 +6,6 @@ import json
 from random import randint
 from time import sleep
 from main_ui import Ui_frmmain
-import paho.mqtt.client as mqtt
 from time import gmtime, strftime
 import xml.etree.ElementTree as ET
 import subprocess
@@ -64,6 +63,7 @@ class main_ui(QMainWindow):
         self.ui.bttneditconfig.clicked.connect(self.load_config_file)
         self.ui.bttntrain.clicked.connect(self.generate_train_script)
         self.ui.bttngettrainedmodel.clicked.connect(self.export_inference_graph)
+        self.ui.bttnlaunchannotator.clicked.connect(self.launchannotator)
         self.load_model_list()
 
         self._thread=QThread()
@@ -74,6 +74,11 @@ class main_ui(QMainWindow):
         qApp.aboutToQuit.connect(self._thread.quit)
         self._thread.start()
 
+    def launchannotator(self):
+        if os.path.exists(os.path.join(os.getcwd(),'labelImg'))==False:
+            QMessageBox.warning(self,'Error','Please download the labelImg utility and paste the folder in tf_sensei directory.')
+            return
+        self.run_command('python3 labelImg/labelImg.py')
 
     def load_prj_directory(self):
         global params_dict
@@ -146,6 +151,9 @@ class main_ui(QMainWindow):
                 for item in label_list:
                     if item not in labels:
                         labels.append(item)
+        if len(item)==0:
+            QMessageBox.warning(self,'Error','No annotation file found. Please launch the annotator tool to annotate the files and then reload the dataset directory.')
+            return
         self.ui.lstlabels.addItems(labels)
         self.ui.txtstatus.append("Found "+str(len(labels))+" label(s) in "+str(file_counter)+" annotation file(s).")
         self.ui.lbldatafolder.setText(folderpath)
