@@ -1,29 +1,29 @@
 # Tf Sensei
-TF Sensei is a GUI for training models using own dataset for the Tensorflow Object Detection API. It can help you train various 
+TF Sensei is a GUI for training models using own dataset for the Tensorflow Object Detection API. It can help you train various
 models(TODO: train own models) using your own dataset without going through tedious commands.
-This utility uses codes from https://github.com/datitran/raccoon_dataset 
+This utility uses codes from https://github.com/datitran/raccoon_dataset
 Also thanks to sentdex from https://pythonprogramming.net/ for his awesome tutorial on machine learning.
 
 
 # Requirements
-This GUI is built using python3 and QT5. So, if you haven't got that, install pyqt5 first. Ubuntu(and other debian users probably) can open 
+This GUI is built using python3 and QT5. So, if you haven't got that, install pyqt5 first. Ubuntu(and other debian users probably) can open
 up a terminal and type:
-   
+
    sudo apt-get install python3-pyqt5
-   
-   sudo pip3 install requests(or just pip install requests if running python3 in windows, try whichever works for you.)
-   
+
+   sudo pip3 install requests (or just pip install requests if running python3 in windows, try whichever works for you.)
+
    pip install pyqt5 worked for me in windows(python3)
 
-NOTE: This software was initially written in Ubuntu environment.Now, Some fixing is going on for Windows, those who are interested to run this in windows, please get it from "win_bs" branch for now. It will be merged eventually with master. 
 Tensorflow object detection API must also be installed. See their installation guide to do that first.
 For Annotation, LabelImg is needed. you can get it from https://github.com/tzutalin/labelImg
 
 Now clone this repository or just download and extract it somewhere. Then paste the downloaded labelImg folder into tf_sensei directory.
-Then you can run it by opening up a terminal and running 
+Then you can run it by opening up a terminal and running
 
    python3 launcher.py
 
-One thing to note is that, for now, you must have a test directory in the dataset directory. So if you dont want to test, just put a single image 
+One thing to note is that, for now, you must have a test directory in the dataset directory. So if you dont want to test, just put a single image
 there with its annotation file.    
-
+#A dirty fix
+In Ubuntu, I ran the shell python commands using python3 which is not the case for windows as there my python3 is simply python. So to fix that, I created a copy of python in the same directory where python.exe of python3 was located and renamed it to python3.exe. If that was a very bad thing to do, let me know. 
